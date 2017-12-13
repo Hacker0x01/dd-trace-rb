@@ -22,7 +22,7 @@ module Datadog
                   :start_time, :end_time,
                   :span_id, :trace_id, :parent_id,
                   :status, :sampled,
-                  :tracer, :context
+                  :tracer, :context, :children
 
     attr_reader :parent
 
@@ -45,6 +45,7 @@ module Datadog
 
       @span_id = Datadog::Utils.next_id
       @parent_id = options.fetch(:parent_id, 0)
+      @children = Set()
       @trace_id = options.fetch(:trace_id, Datadog::Utils.next_id)
 
       @context = options.fetch(:context, nil)
@@ -151,6 +152,7 @@ module Datadog
     # If the parent is nil, set the span zero values.
     def parent=(parent)
       @parent = parent
+      parent.children << self
 
       if parent.nil?
         @trace_id = @span_id
