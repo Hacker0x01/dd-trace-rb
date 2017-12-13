@@ -45,7 +45,7 @@ module Datadog
 
       @span_id = Datadog::Utils.next_id
       @parent_id = options.fetch(:parent_id, 0)
-      @children = Set()
+      @children = Set.new
       @trace_id = options.fetch(:trace_id, Datadog::Utils.next_id)
 
       @context = options.fetch(:context, nil)
